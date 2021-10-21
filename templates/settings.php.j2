@@ -1,0 +1,26 @@
+<?php
+
+// phpcs:ignoreFile
+
+$databases = [];
+$settings['update_free_access'] = FALSE;
+$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.yml';
+$settings['file_scan_ignore_directories'] = [
+  'node_modules',
+  'bower_components',
+];
+$settings['entity_update_batch_size'] = 50;
+$settings['entity_update_backup'] = TRUE;
+$settings['migrate_node_migrate_type_classic'] = FALSE;
+
+$databases['default']['default'] = array (
+  'database' => '{{ schoolsite_database_name }}',
+  'username' => '{{ schoolsite_database_username }}',
+  'password' => '{{ schoolsite_database_pass }}',
+  'prefix' => '',
+  'host' => '{{ schoolsite_database_host }}',
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+);
+$settings['config_sync_directory'] = '{{ schoolsite_install_location }}/drupal/config/sync';

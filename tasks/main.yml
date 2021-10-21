@@ -1,0 +1,40 @@
+---
+- name: 'Clone the schoolsite repo'
+  git:
+    repo: 'https://github.com/hcpss-banderson/schoolsite-skelleton.git'
+    dest: "{{ schoolsite_install_location }}"
+    force: yes
+
+- name: "Create the files directory"
+  file:
+    path: "{{ schoolsite_install_location }}/drupal/web/sites/default/files"
+    owner: www-data
+    group: www-data
+    state: directory
+    mode: '0755'
+
+- name: "Create the settings file"
+  template:
+    src: templates/settings.php.j2
+    dest: "{{ schoolsite_install_location }}/drupal/web/sites/default/settings.php"
+
+- name: "Copy the config files"
+  copy:
+    remote_src: yes
+    src: "{{ item }}"
+    dest: "{{ schoolsite_install_location }}/drupal/config/sync/"
+  with_fileglob: "{{ schoolsite_install_location }}/schools/{{ acronym }}/config/*.yml"
+
+- name: "Install dependencies"
+  composer:
+    command: install
+    working_dir: "{{ schoolsite_install_location }}/drupal"
+
+- name: "Install drupal"
+  command: "drush --root={{ schoolsite_install_location }}/drupal si -y --existing-config --account-pass={{ schoolsite_account_pass }}"
+
+- name: "Import drupal configuration"
+  command: "drush --root={{ schoolsite_install_location }}/drupal cim -y"
+
+- name: "Import content"
+  command: "drush --root={{ schoolsite_install_location }}/drupal content-snapshot:import -y --snapshot-path={{ schoolsite_install_location }}/schools/{{ schoolsite_acronym }}/content"

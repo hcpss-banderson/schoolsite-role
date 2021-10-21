@@ -1,0 +1,8 @@
+---
+schoolsite_acronym: aes
+schoolsite_install_location: "/var/www/{{ schoolsite_acronym }}"
+schoolsite_database_name: drupal
+schoolsite_database_username: drupal
+schoolsite_database_pass: drupal
+schoolsite_database_host: localhost
+schoolsite_account_pass: admin
